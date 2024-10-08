@@ -1,20 +1,35 @@
+"use client";
+
 import React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+type Inputs = {
+  name: string;
+  email: string;
+};
 
 const PlayForm = () => {
-  // TODO: We have name and email inputs. It should log out when we submit.
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-  console.log(watch("example")); // watch input value by passing the name of it
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
+  console.log(watch("name")); // watch input value by passing the name of it
 
   return (
-    /* TODO: Validate your inputs before invoking "onSubmit" */
-    <form className="text-black">
-      {/* TODO: Register your input into the hook */}
-      <input defaultValue="test" />
+    <form onSubmit={handleSubmit(onSubmit)} className="text-black">
+      <input defaultValue="test" {...register("name")} />
 
-      {/* TODO: This input needs to show a required error message */}
-      <input />
+      <input {...register("email", { required: true })} />
+      {errors.email ? (
+        <span className="text-red-400 ml-3">Email required </span>
+      ) : null}
 
-      {/* TODO: Who will submit the form?*/}
+      <input type="submit" />
     </form>
   );
 };
